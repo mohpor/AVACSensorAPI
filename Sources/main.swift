@@ -82,6 +82,12 @@ func dbHandler(data: [String:Any]) throws -> RequestHandler {
   return {
     request, response in
 
+    guard request.header(HTTPRequestHeader.Name.custom(name: "5621A0DE")) == "D699279EC805" else {
+      Log.error(message: "Invalid headers.")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
     print("db got called (\(request.path))")
     guard dataMysql.connect(host: testHost, user: testUser, password: testPassword ) else {
       Log.info(message: "Failure connecting to data server \(testHost)")
