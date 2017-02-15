@@ -21,6 +21,7 @@ import PerfectLib
 import PerfectHTTP
 import PerfectHTTPServer
 import Foundation
+import MySQL
 
 // An example request handler.
 // This 'handler' function can be referenced directly in the configuration below.
@@ -69,6 +70,50 @@ func postHandler(data: [String:Any]) throws -> RequestHandler {
     response.completed()
   }
 }
+
+let testHost = "127.0.0.1"
+let testUser = "root"
+// PLEASE change to whatever your actual password is before running these tests
+let testPassword = "Moh.6686"
+let testSchema = "Testdb"
+let dataMysql = MySQL()
+
+func dbHandler(data: [String:Any]) throws -> RequestHandler {
+  return {
+    request, response in
+
+    print("db got called (\(request.path))")
+    guard dataMysql.connect(host: testHost, user: testUser, password: testPassword ) else {
+      Log.info(message: "Failure connecting to data server \(testHost)")
+      return
+    }
+
+    defer {
+      dataMysql.close()  // defer ensures we close our db connection at the end of this request
+    }
+
+    guard dataMysql.selectDatabase(named: testSchema) && dataMysql.query(statement: "select * from t") else {
+      Log.info(message: "Failure: \(dataMysql.errorCode()) \(dataMysql.errorMessage())")
+      return
+    }
+
+    let results = dataMysql.storeResults()
+
+    var resultArray = [[String?]]()
+    while let row = results?.next() {
+      resultArray.append(row)
+
+    }
+
+    response.appendBody(string: "<html><title>Mysql Test</title><body>\(resultArray.debugDescription)</body></html>")
+    response.completed()
+
+//    var bdy = "db called"
+//    response.appendBody(string: bdy)
+//    // Ensure that response.completed() is called when your processing is done.
+//    response.completed()
+  }
+}
 // Configuration data for two example servers.
 // This example configuration shows how to launch one or more servers 
 // using a configuration dictionary.
@@ -90,7 +135,8 @@ let confData = [
 				["method":"get", "uri":"/**", "handler":PerfectHTTPServer.HTTPHandler.staticFiles,
 				 "documentRoot":"./webroot",
 				 "allowResponseFilters":true],
-        ["method":"post", "uri":"/", "handler":postHandler]
+        ["method":"post", "uri":"/", "handler":postHandler],
+        ["method":"post", "uri":"/db", "handler":dbHandler]
 			],
 			"filters":[
 				[
