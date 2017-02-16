@@ -4,15 +4,17 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "C4127C9B9C8FDF608B532AD72407863CE2797629" : 9223372036854775807,
+    "43BF8F9148B1F39FBDE34E7D1E69C54C78D21FCC" : 9223372036854775807,
     "0B9B07A57A7603A158703662ACDD6F3ABAA339F4" : 9223372036854775807,
-    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : 9223372036854775807
+    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : 9223372036854775807,
+    "C4127C9B9C8FDF608B532AD72407863CE2797629" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B56D7E65-F307-4ABD-B60B-B3CF6F027CD7",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "C4127C9B9C8FDF608B532AD72407863CE2797629" : "PerfectTemplate\/Packages\/PerfectHTTPServer-2.1.14\/",
-    "0B9B07A57A7603A158703662ACDD6F3ABAA339F4" : "PerfectTemplate\/",
-    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : "PerfectTemplate\/Packages\/PerfectHTTP-2.1.6\/"
+    "43BF8F9148B1F39FBDE34E7D1E69C54C78D21FCC" : "AVACServer\/Packages\/SwiftProtobuf-0.9.24\/",
+    "0B9B07A57A7603A158703662ACDD6F3ABAA339F4" : "AVACServer\/",
+    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : "AVACServer\/Packages\/PerfectHTTP-2.1.6\/",
+    "C4127C9B9C8FDF608B532AD72407863CE2797629" : "AVACServer\/Packages\/PerfectHTTPServer-2.1.14\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "AVACServer",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -22,6 +24,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mohpor\/AVACServer.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0B9B07A57A7603A158703662ACDD6F3ABAA339F4"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/apple\/swift-protobuf.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "43BF8F9148B1F39FBDE34E7D1E69C54C78D21FCC"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/PerfectlySoft\/Perfect-HTTP.git",
