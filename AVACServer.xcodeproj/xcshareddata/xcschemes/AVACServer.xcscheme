@@ -17,7 +17,7 @@
                BlueprintIdentifier = "OBJ_777"
                BuildableName = "PerfectLib.framework"
                BlueprintName = "PerfectLib"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,7 +31,7 @@
                BlueprintIdentifier = "OBJ_793"
                BuildableName = "COpenSSL.framework"
                BlueprintName = "COpenSSL"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -45,7 +45,7 @@
                BlueprintIdentifier = "OBJ_1481"
                BuildableName = "PerfectThread.framework"
                BlueprintName = "PerfectThread"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -59,7 +59,7 @@
                BlueprintIdentifier = "OBJ_1489"
                BuildableName = "PerfectNet.framework"
                BlueprintName = "PerfectNet"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -73,7 +73,7 @@
                BlueprintIdentifier = "OBJ_1506"
                BuildableName = "PerfectHTTP.framework"
                BlueprintName = "PerfectHTTP"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -87,7 +87,7 @@
                BlueprintIdentifier = "OBJ_1529"
                BuildableName = "CHTTPParser.framework"
                BlueprintName = "CHTTPParser"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -101,7 +101,7 @@
                BlueprintIdentifier = "OBJ_1547"
                BuildableName = "CZlib.framework"
                BlueprintName = "CZlib"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -115,7 +115,7 @@
                BlueprintIdentifier = "OBJ_1579"
                BuildableName = "PerfectHTTPServer.framework"
                BlueprintName = "PerfectHTTPServer"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -129,7 +129,7 @@
                BlueprintIdentifier = "OBJ_1607"
                BuildableName = "MySQL.framework"
                BlueprintName = "MySQL"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -141,9 +141,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "OBJ_1614"
-               BuildableName = "PerfectTemplate"
-               BlueprintName = "PerfectTemplate"
-               ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+               BuildableName = "AVACServer"
+               BlueprintName = "AVACServer"
+               ReferencedContainer = "container:AVACServer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -174,7 +174,7 @@
             BlueprintIdentifier = "OBJ_777"
             BuildableName = "PerfectLib.framework"
             BlueprintName = "PerfectLib"
-            ReferencedContainer = "container:PerfectTemplate.xcodeproj">
+            ReferencedContainer = "container:AVACServer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
