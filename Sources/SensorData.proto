@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message SensorDataModel {
+   string deviceID = 1;
+   float temperature = 2;
+   float humidity = 3;
+   float pressure = 4;
+   float uv = 5;
+}
+
+message SensorDataResult {
+   repeated SensorDataModel data = 1;
+}
