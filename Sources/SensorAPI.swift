@@ -48,6 +48,7 @@ struct DataBase {
   }
 
   struct DBSchema {
+    static let schemaName = "Sensor_Data"
     struct SensorDataSchema {
       static let name  = "Sensor_Data"
       struct Fields {
@@ -112,28 +113,15 @@ class SensorAPI {
     }
 
     defer {
-      dataMysql.close()  // defer ensures we close our db connection at the end of this request
+      dataMysql.close()
     }
 
-    //    guard dataMysql.selectDatabase(named: DataBase.DBSchema.SensorDataSchema.name) && dataMysql.query(statement: DataBase.DBSchema.SensorDataSchema.Fields.selectQuery(deviceID: "")) else {
-    //      Log.info(message: "Failure: \(dataMysql.errorCode()) \(dataMysql.errorMessage())")
-    //      return
-    //    }
-
     let query = DataBase.DBSchema.SensorDataSchema.insertQuery(sensorData: sensorData)
-    guard dataMysql.selectDatabase(named: DataBase.DBSchema.SensorDataSchema.name) && dataMysql.query(statement: query) else {
+    guard dataMysql.selectDatabase(named: DataBase.DBSchema.schemaName) && dataMysql.query(statement: query) else {
       Log.info(message: "Failure: \(dataMysql.errorCode()) \(dataMysql.errorMessage())")
       response.completed(status: HTTPResponseStatus.internalServerError)
       return
     }
-
-    //    let results = dataMysql.storeResults()
-    //
-    //    var resultArray = [[String?]]()
-    //    while let row = results?.next() {
-    //      resultArray.append(row)
-    //
-    //    }
 
     response.appendBody(string: "<html><title>Insert Successfull</title><body><h2>Insert Successful</h2></body></html>")
     response.completed()

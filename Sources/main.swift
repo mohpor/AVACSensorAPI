@@ -36,7 +36,7 @@ var routes = Routes()
 
 routes.add(method: .get, uri: "/", handler: handler)
 routes.add(method: .post, uri: "/", handler: handler)
-routes.add(method: .post, uri: "/db", handler: SensorAPI.dbHandler)
+routes.add(method: .post, uri: "/sensor", handler: SensorAPI.dbHandler)
 
 server.addRoutes(routes)
 
