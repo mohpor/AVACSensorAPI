@@ -47,12 +47,14 @@ struct DataBase {
 
       }
 
-//      static func selectQuery(deviceID: String) -> String {
-//        return "SELECT \(Fields.idField), \(Fields.deviceID), \(Fields.temperature), \(Fields.humidity), \(Fields.pressure), \(Fields.uv) from \(SensorDataSchema.name)"
-//      }
+      static func selectBaseQuery() -> String {
+
+        return "SELECT \(Fields.idField), \(Fields.deviceID), \(Fields.temperature), \(Fields.humidity), \(Fields.pressure), \(Fields.uv), UNIX_TIMESTAMP(\(Fields.date)) as \(Fields.date) from \(SensorDataSchema.name)"
+
+      }
 
       static func selectLastNQuery(deviceID: String, count: Int = 1) -> String {
-        return "SELECT \(Fields.idField), \(Fields.deviceID), \(Fields.temperature), \(Fields.humidity), \(Fields.pressure), \(Fields.uv), UNIX_TIMESTAMP(\(Fields.date)) as \(Fields.date) from \(SensorDataSchema.name) WHERE \(Fields.deviceID) = '\(deviceID)' ORDER BY date desc Limit \(count)"
+        return "\(selectBaseQuery()) WHERE \(Fields.deviceID) = '\(deviceID)' ORDER BY date desc Limit \(count)"
       }
 
       static func insertQuery(sensorData: SensorData) -> String {
