@@ -1,11 +1,13 @@
 syntax = "proto3";
 
 message SensorDataModel {
-   string deviceID = 1;
-   float temperature = 2;
-   float humidity = 3;
-   float pressure = 4;
-   float uv = 5;
+   string id = 1;
+   string deviceID = 2;
+   float temperature = 3;
+   float humidity = 4;
+   float pressure = 5;
+   float uv = 6;
+   double date = 7;
 }
 
 message SensorDataResult {

@@ -23,6 +23,8 @@ import PerfectHTTPServer
 import Foundation
 
 
+
+
 func handler(request: HTTPRequest, response:HTTPResponse){
 		response.setHeader(.contentType, value: "text/html")
 		response.appendBody(string: "<html><title>Nada.</title><body>Nothing to see here.</body></html>")
@@ -36,7 +38,9 @@ var routes = Routes()
 
 routes.add(method: .get, uri: "/", handler: handler)
 routes.add(method: .post, uri: "/", handler: handler)
-routes.add(method: .post, uri: "/sensor", handler: SensorAPI.dbHandler)
+routes.add(method: .post, uri: "/sensor", handler: SensorAPI.addSensorData)
+routes.add(method: .get, uri: "/app/last", handler: AppAPI.getLast)
+routes.add(method: .get, uri: "/app/list", handler: AppAPI.getList)
 
 server.addRoutes(routes)
 

@@ -11,7 +11,7 @@ import PerfectHTTP
 import PerfectLib
 import MySQL
 
-struct RequestSchema {
+struct SensorRequestSchema {
 
   struct Headers {
     static let mandatoryField = HTTPRequestHeader.Name.custom(name: "5621A0DE")
@@ -39,60 +39,14 @@ struct SensorData {
 
 }
 
-struct DataBase {
 
-  struct DBConnection {
-    static let host = "127.0.0.1"
-    static let user = "root"
-    static let password = "Moh.6686"
-  }
-
-  struct DBSchema {
-    static let schemaName = "Sensor_Data"
-    struct SensorDataSchema {
-      static let name  = "Sensor_Data"
-      struct Fields {
-
-        static let idField = "id"
-        static let deviceID = "deviceID"
-        static let temperature = "temperature"
-        static let humidity = "humidity"
-        static let pressure = "pressure"
-        static let uv = "uv"
-
-      }
-      static func selectQuery(deviceID: String) -> String {
-        return "SELECT \(Fields.idField), \(Fields.deviceID), \(Fields.temperature), \(Fields.humidity), \(Fields.pressure), \(Fields.uv) from \(SensorDataSchema.name)"
-      }
-
-      static func insertQuery(sensorData: SensorData) -> String {
-
-        var q = ""
-        q += "INSERT INTO \(DBSchema.SensorDataSchema.name) "
-        q += "(\(DBSchema.SensorDataSchema.Fields.deviceID), \(DBSchema.SensorDataSchema.Fields.temperature), \(DBSchema.SensorDataSchema.Fields.humidity), \(DBSchema.SensorDataSchema.Fields.pressure), \(DBSchema.SensorDataSchema.Fields.uv))"
-        q += " VALUES ("
-        q += "'\(sensorData.deviceID)', "
-        q += "'\(sensorData.temperature)', "
-        q += "'\(sensorData.humidity)', "
-        q += "'\(sensorData.pressure)', "
-        q += "'\(sensorData.uv)'"
-        q += ")"
-        return q
-        
-      }
-      
-    }
-  }
-  
-}
 
 class SensorAPI {
 
-  static let dataMysql = MySQL()
 
-  static func dbHandler(request: HTTPRequest, response:HTTPResponse) {
+  static func addSensorData(request: HTTPRequest, response:HTTPResponse) {
 
-    guard request.header(RequestSchema.Headers.mandatoryField) == RequestSchema.Headers.mandatoryValue else {
+    guard request.header(SensorRequestSchema.Headers.mandatoryField) == SensorRequestSchema.Headers.mandatoryValue else {
       Log.error(message: "Invalid headers.")
       response.completed(status: HTTPResponseStatus.badRequest)
       return
@@ -104,21 +58,12 @@ class SensorAPI {
       return
     }
 
-
-
     print("db got called (\(request.path))")
-    guard dataMysql.connect(host: DataBase.DBConnection.host, user: DataBase.DBConnection.user, password: DataBase.DBConnection.password ) else {
-      Log.info(message: "Failure connecting to data server \(DataBase.DBConnection.host)")
-      return
-    }
-
+    let query = DataBase.DBSchema.SensorDataSchema.insertQuery(sensorData: sensorData)
     defer {
       dataMysql.close()
     }
-
-    let query = DataBase.DBSchema.SensorDataSchema.insertQuery(sensorData: sensorData)
-    guard dataMysql.selectDatabase(named: DataBase.DBSchema.schemaName) && dataMysql.query(statement: query) else {
-      Log.info(message: "Failure: \(dataMysql.errorCode()) \(dataMysql.errorMessage())")
+    guard dataMysql.performQuery(query: query) else {
       response.completed(status: HTTPResponseStatus.internalServerError)
       return
     }
@@ -130,17 +75,14 @@ class SensorAPI {
 
   static func parseRequest(request: HTTPRequest) -> SensorData? {
 
-    var params = [String:String]()
-    for t in request.postParams {
-      params[t.0] = t.1
-    }
+    var params = request.bodyParams
 
-    guard let devID = params[RequestSchema.Fields.deviceID] else {
+    guard let devID = params[SensorRequestSchema.Fields.deviceID] else {
       Log.error(message: "DeviceID not present")
       return nil
     }
 
-    guard let tempStr = params[RequestSchema.Fields.temperature] else {
+    guard let tempStr = params[SensorRequestSchema.Fields.temperature] else {
       Log.error(message: "Temperature not present")
       return nil
     }
@@ -150,7 +92,7 @@ class SensorAPI {
       return nil
     }
 
-    guard let humStr = params[RequestSchema.Fields.humidity] else {
+    guard let humStr = params[SensorRequestSchema.Fields.humidity] else {
       Log.error(message: "Humidity not present")
       return nil
     }
@@ -160,7 +102,7 @@ class SensorAPI {
       return nil
     }
 
-    guard let pressStr = params[RequestSchema.Fields.pressure] else {
+    guard let pressStr = params[SensorRequestSchema.Fields.pressure] else {
       Log.error(message: "Pressure not present")
       return nil
     }
@@ -170,7 +112,7 @@ class SensorAPI {
       return nil
     }
 
-    guard let uvStr = params[RequestSchema.Fields.uv] else {
+    guard let uvStr = params[SensorRequestSchema.Fields.uv] else {
       Log.error(message: "UV not present")
       return nil
     }
