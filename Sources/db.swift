@@ -26,7 +26,6 @@ struct DataBase {
       static let name  = "Sensor_Data"
       struct Fields {
 
-        static let idField = "id"
         static let deviceID = "deviceID"
         static let temperature = "temperature"
         static let humidity = "humidity"
@@ -37,24 +36,40 @@ struct DataBase {
       }
 
       struct FieldsOrder {
-        static let idField = 0
-        static let deviceID = 1
-        static let temperature = 2
-        static let humidity = 3
-        static let pressure = 4
-        static let uv = 5
-        static let date = 6
+        static let deviceID = 0
+        static let temperature = 1
+        static let humidity = 2
+        static let pressure = 3
+        static let uv = 4
+        static let date = 5
 
       }
 
       static func selectBaseQuery() -> String {
 
-        return "SELECT \(Fields.idField), \(Fields.deviceID), \(Fields.temperature), \(Fields.humidity), \(Fields.pressure), \(Fields.uv), UNIX_TIMESTAMP(\(Fields.date)) as \(Fields.date) from \(SensorDataSchema.name)"
+        return "SELECT \(Fields.deviceID), \(Fields.temperature), \(Fields.humidity), \(Fields.pressure), \(Fields.uv), UNIX_TIMESTAMP(\(Fields.date)) as \(Fields.date) from \(SensorDataSchema.name) "
 
       }
 
       static func selectLastNQuery(deviceID: String, count: Int = 1) -> String {
-        return "\(selectBaseQuery()) WHERE \(Fields.deviceID) = '\(deviceID)' ORDER BY date desc Limit \(count)"
+        var result = selectBaseQuery()
+        result += "WHERE \(Fields.deviceID) = '\(deviceID)' ORDER BY date desc Limit \(count)"
+        return result
+      }
+
+      static func selectRangeQuery(deviceID: String, startDate: Double, endDate: Double?) -> String {
+
+        var result = selectBaseQuery()
+
+        result += "WHERE \(Fields.deviceID) = '\(deviceID)' "
+        result += "and \(Fields.date) >= \(startDate) "
+        if let ed = endDate {
+          result += "and \(Fields.date) <= \(ed) "
+        }
+        result += "ORDER BY date desc"
+
+        return result
+
       }
 
       static func insertQuery(sensorData: SensorData) -> String {

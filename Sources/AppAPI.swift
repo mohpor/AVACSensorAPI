@@ -32,6 +32,8 @@ struct AppRequestSchema {
   struct List {
     struct Fields {
       static let deviceID = "deviceID"
+      static let startDate = "startDate"
+      static let endDate = "endDate"
     }
   }
 
@@ -43,7 +45,6 @@ class AppAPI {
 
 
   struct SensorDataObject {
-    let rowID: String
     let deviceID : String
     let temperature: Float
     let humidity: Float
@@ -52,29 +53,7 @@ class AppAPI {
     let date: Double
   }
 
-  static func getLast(request: HTTPRequest, response:HTTPResponse) {
-    guard validateRequest(request: request) else {
-      Log.error(message: "Invalid request!")
-      response.completed(status: HTTPResponseStatus.badRequest)
-      return
-    }
-
-    let params = request.urlParams
-
-    guard var deviceID = params[AppRequestSchema.Last.Fields.deviceID] else {
-      Log.error(message: "Device ID not present!")
-      response.completed(status: HTTPResponseStatus.badRequest)
-      return
-    }
-
-    deviceID = deviceID.replacingOccurrences(of: " ", with: "")
-
-    let countStr = params[AppRequestSchema.Last.Fields.count] ?? "1"
-    let count = Int(countStr) ?? 1
-
-    print("DeviceID is:'\(deviceID)' count is:\(count)")
-
-    let query = DataBase.DBSchema.SensorDataSchema.selectLastNQuery(deviceID: deviceID, count: count)
+  static func performQuery(query: String, request: HTTPRequest ,response: HTTPResponse) {
 
     defer {
       dataMysql.close()
@@ -143,12 +122,72 @@ class AppAPI {
 
   }
 
+  static func getLast(request: HTTPRequest, response:HTTPResponse) {
+    guard validateRequest(request: request) else {
+      Log.error(message: "Invalid request!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+    let params = request.urlParams
+
+    guard let deviceID = params[AppRequestSchema.Last.Fields.deviceID] else {
+      Log.error(message: "Device ID not present!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+    let countStr = params[AppRequestSchema.Last.Fields.count] ?? "1"
+    let count = Int(countStr) ?? 1
+
+    print("DeviceID is:'\(deviceID)' count is:\(count)")
+
+    let query = DataBase.DBSchema.SensorDataSchema.selectLastNQuery(deviceID: deviceID, count: count)
+    performQuery(query: query, request: request, response: response)
+
+  }
+
+  static func getLastAverage(request: HTTPRequest, response:HTTPResponse) {
+
+  }
+
+
   static func getList(request: HTTPRequest, response:HTTPResponse) {
     guard validateRequest(request: request) else {
       Log.error(message: "Invalid request!")
       response.completed(status: HTTPResponseStatus.badRequest)
       return
     }
+
+    let params = request.urlParams
+
+    guard let deviceID = params[AppRequestSchema.Last.Fields.deviceID] else {
+      Log.error(message: "Device ID not present!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+    guard let startDateStr = params[AppRequestSchema.List.Fields.startDate] else {
+      Log.error(message: "StartDate Not present!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+
+    }
+
+    guard let startDate = Double(startDateStr) else {
+      Log.error(message: "StartDate malformed!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+
+    var endDate: Double? = nil
+    if let endDateStr = params[AppRequestSchema.List.Fields.endDate] {
+      endDate = Double(endDateStr)
+    }
+    print("DeviceID is:'\(deviceID)' start from:\(startDate) end to: \(endDate)")
+    let query = DataBase.DBSchema.SensorDataSchema.selectRangeQuery(deviceID: deviceID, startDate: startDate, endDate: endDate)
+    performQuery(query: query, request: request, response: response)
 
   }
 
@@ -164,13 +203,13 @@ class AppAPI {
 
 
   static func parseRow(row: [String?]) -> SensorDataObject? {
-    guard let row_id = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.idField],
+    guard
       let devID = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.deviceID],
       let tempStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.temperature],
       let humStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.humidity],
       let pressStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.pressure],
       let uvStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.uv],
-      let dateStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.temperature] else {
+      let dateStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.date] else {
         Log.error(message: "Could not parse row data.")
         return nil
     }
@@ -184,7 +223,7 @@ class AppAPI {
         return nil
     }
 
-    return SensorDataObject(rowID: row_id, deviceID: devID, temperature: temp, humidity: hum, pressure: press, uv: uv, date: dateTicks)
+    return SensorDataObject(deviceID: devID, temperature: temp, humidity: hum, pressure: press, uv: uv, date: dateTicks)
 
   }
 
@@ -205,7 +244,6 @@ class AppAPI {
     var result: JSONArray = []
     for row in rows {
       var jsonRow: JSONDictionary = [:]
-      jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.idField] = row.rowID
       jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.deviceID] = row.deviceID
       jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.temperature] = row.temperature
       jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.humidity] = row.humidity
@@ -223,7 +261,7 @@ class AppAPI {
     var res: [SensorDataModel] = []
     for row in rows {
 
-      let mod = SensorDataModel(id: row.rowID, deviceId: row.deviceID, temperature: row.temperature, humidity: row.humidity, pressure: row.pressure, uv: row.uv, date: row.date)
+      let mod = SensorDataModel(deviceId: row.deviceID, temperature: row.temperature, humidity: row.humidity, pressure: row.pressure, uv: row.uv, date: row.date)
       res.append(mod)
 
     }
