@@ -12,3 +12,17 @@ message SensorDataModel {
 message SensorDataResult {
    repeated SensorDataModel data = 1;
 }
+
+message SensorDataHourlyAverageModel {
+   string deviceID = 1;
+   float temperature = 2;
+   float humidity = 3;
+   float pressure = 4;
+   float uv = 5;
+   string date = 6;
+   int32 hour = 7;
+}
+
+message SensorDataHourlyAverageResult {
+   repeated SensorDataHourlyAverageModel data = 1;
+}

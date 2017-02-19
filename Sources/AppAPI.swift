@@ -12,6 +12,7 @@ import PerfectHTTP
 import PerfectLib
 import MySQL
 
+typealias dataResponseHandler = ((HTTPResponse, [[String?]]) -> Void)
 
 
 struct AppRequestSchema {
@@ -50,11 +51,179 @@ class AppAPI {
     let humidity: Float
     let pressure: Float
     let uv: Float
-    let date: Double
+    let date: Double?
+
+    init?(row: [String?]) {
+      guard
+        let devID = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.deviceID],
+        let tempStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.temperature],
+        let humStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.humidity],
+        let pressStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.pressure],
+        let uvStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.uv]
+        else {
+          Log.error(message: "Could not parse row data.")
+          return nil
+      }
+
+      var dateTicks: Double? = nil
+      if row.count > DataBase.DBSchema.SensorDataSchema.FieldsOrder.date{
+        if let dateStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.date] {
+          dateTicks = Double(dateStr)
+        }
+      }
+
+      guard let temp = Float(tempStr),
+        let hum = Float(humStr),
+        let press = Float(pressStr),
+        let uv = Float(uvStr) else {
+          Log.error(message: "Could not cast row data.")
+          return nil
+      }
+      self.deviceID = devID
+      self.temperature = temp
+      self.humidity = hum
+      self.pressure = press
+      self.uv = uv
+      self.date = dateTicks
+    }
+
+    static func parseRows(rows: [[String?]]) -> [SensorDataObject] {
+      var result: [SensorDataObject] = []
+      for row in rows {
+        guard let sensO = SensorDataObject(row: row) else {
+          Log.warning(message: "Could not parse row: \(row)")
+          continue
+        }
+        result.append(sensO)
+      }
+      return result
+    }
+
+    static func jsonParse(rows: [SensorDataObject]) -> JSONArray? {
+
+      var result: JSONArray = []
+      for row in rows {
+        var jsonRow: JSONDictionary = [:]
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.deviceID] = row.deviceID
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.temperature] = row.temperature
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.humidity] = row.humidity
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.pressure] = row.pressure
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.uv] = row.uv
+        if let d = row.date {
+          jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.date] = d
+        }
+        result.append(jsonRow)
+
+      }
+      return result
+
+    }
+
+    static func pbfParse(rows: [SensorDataObject]) -> SensorDataResult? {
+      var res: [SensorDataModel] = []
+      for row in rows {
+
+        let mod = SensorDataModel(deviceId: row.deviceID, temperature: row.temperature, humidity: row.humidity, pressure: row.pressure, uv: row.uv, date: row.date)
+        res.append(mod)
+        
+      }
+      
+      return SensorDataResult(data: res)
+      
+    }
   }
 
-  static func performQuery(query: String, request: HTTPRequest ,response: HTTPResponse) {
+  struct SensorDataHourlyAverageObject {
+    let deviceID : String
+    let temperature: Float
+    let humidity: Float
+    let pressure: Float
+    let uv: Float
+    let date: String?
+    let hour: Int32
 
+    init?(row: [String?]) {
+      guard
+
+        let devID = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.deviceID],
+        let tempStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.temperature],
+        let humStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.humidity],
+        let pressStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.pressure],
+        let uvStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.uv],
+        let dateStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.date],
+        let hourStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.hour]
+
+        else {
+          Log.error(message: "Could not parse row data.")
+          return nil
+      }
+
+      guard let temp = Float(tempStr),
+        let hum = Float(humStr),
+        let press = Float(pressStr),
+        let uv = Float(uvStr),
+        let hour = Int32(hourStr)
+      else {
+          Log.error(message: "Could not cast row data.")
+          return nil
+      }
+
+      self.deviceID = devID
+      self.temperature = temp
+      self.humidity = hum
+      self.pressure = press
+      self.uv = uv
+      self.date = dateStr
+      self.hour = hour
+
+    }
+
+    static func parseRows(rows: [[String?]]) -> [SensorDataHourlyAverageObject] {
+      var result: [SensorDataHourlyAverageObject] = []
+      for row in rows {
+        guard let sensO = SensorDataHourlyAverageObject(row: row) else {
+          Log.warning(message: "Could not parse row: \(row)")
+          continue
+        }
+        result.append(sensO)
+      }
+      return result
+    }
+
+    static func jsonParse(rows: [SensorDataHourlyAverageObject]) -> JSONArray? {
+      var result: JSONArray = []
+      for row in rows {
+        var jsonRow: JSONDictionary = [:]
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.deviceID] = row.deviceID
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.temperature] = row.temperature
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.humidity] = row.humidity
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.pressure] = row.pressure
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.uv] = row.uv
+        if let d = row.date {
+          jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.date_part] = d
+        }
+        jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.date_hour] = row.hour
+        result.append(jsonRow)
+
+      }
+      return result
+    }
+
+    static func pbfParse(rows: [SensorDataHourlyAverageObject]) -> SensorDataHourlyAverageResult? {
+      var res: [SensorDataHourlyAverageModel] = []
+      for row in rows {
+
+        let mod = SensorDataHourlyAverageModel(deviceId: row.deviceID, temperature: row.temperature, humidity: row.humidity, pressure: row.pressure, uv: row.uv, date: row.date, hour: row.hour)
+        res.append(mod)
+
+      }
+
+      return SensorDataHourlyAverageResult(data: res)
+    }
+
+  }
+
+  static func performQuery(query: String, request: HTTPRequest, response: HTTPResponse, jsonHandler: dataResponseHandler, pbfHandler: dataResponseHandler) {
     defer {
       dataMysql.close()
     }
@@ -79,48 +248,95 @@ class AppAPI {
       }
     }
 
-    let sensData = parseRows(rows: resultArray)
-
     if pbfOut {
-
-      guard let pbf = pbfParseSensorData(rows: sensData) else {
-        Log.error(message: "Could not make pbf object")
-        response.completed(status: HTTPResponseStatus.internalServerError)
-        return
-      }
-
-      guard let pbfData = try? pbf.serializeProtobufBytes() else {
-        Log.error(message: "Could not export pbf object")
-        response.completed(status: HTTPResponseStatus.internalServerError)
-        return
-      }
-
-      response.setBody(bytes: pbfData)
-
-
+      pbfHandler(response, resultArray)
     } else {
-
-      guard let jsonArray = jsonParseSensorDataRow(rows: sensData) else {
-        response.completed(status: HTTPResponseStatus.internalServerError)
-        return
-      }
-
-      guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonArray, options: []) else {
-        Log.error(message: "Could not make josn object")
-        response.completed(status: HTTPResponseStatus.internalServerError)
-        return
-      }
-      guard let jsonStr = String(data: jsonData, encoding: .utf8) else {
-        Log.error(message: "Could not make josn str")
-        response.completed(status: HTTPResponseStatus.internalServerError)
-        return
-      }
-      response.setBody(string: jsonStr)
-      //    response.appendBody(string: "<html><title>Mysql Test</title><body>\(resultArray.debugDescription)</body></html>")
+      jsonHandler(response, resultArray)
     }
-    response.completed()
 
   }
+
+  static func sensorDataJsonItemHandler(response: HTTPResponse, resultArray:[[String?]]) {
+    let sensData = SensorDataObject.parseRows(rows: resultArray)
+    guard let jsonArray = SensorDataObject.jsonParse(rows: sensData) else {
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonArray, options: []) else {
+      Log.error(message: "Could not make josn object")
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+    guard let jsonStr = String(data: jsonData, encoding: .utf8) else {
+      Log.error(message: "Could not make josn str")
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+    response.setBody(string: jsonStr)
+    response.completed()
+  }
+
+  static func sensorDataPBFItemHandler(response: HTTPResponse, resultArray:[[String?]]) {
+    let sensData = SensorDataObject.parseRows(rows: resultArray)
+    guard let pbf = SensorDataObject.pbfParse(rows: sensData) else {
+      Log.error(message: "Could not make pbf object")
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+
+    guard let pbfData = try? pbf.serializeProtobufBytes() else {
+      Log.error(message: "Could not export pbf object")
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+
+    response.setBody(bytes: pbfData)
+    response.completed()
+  }
+
+  static func sensorDataHourlyAveragePbfHandler(response: HTTPResponse, resultArray:[[String?]]) {
+
+    let sensData = SensorDataHourlyAverageObject.parseRows(rows: resultArray)
+    guard let pbf = SensorDataHourlyAverageObject.pbfParse(rows: sensData) else {
+      Log.error(message: "Could not make pbf object")
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+
+    guard let pbfData = try? pbf.serializeProtobufBytes() else {
+      Log.error(message: "Could not export pbf object")
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+
+    response.setBody(bytes: pbfData)
+    response.completed()
+  }
+
+
+static func sensorDataHourlyAverageJsonHandler(response: HTTPResponse, resultArray:[[String?]]) {
+    let sensData = SensorDataHourlyAverageObject.parseRows(rows: resultArray)
+    guard let jsonArray = SensorDataHourlyAverageObject.jsonParse(rows: sensData) else {
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonArray, options: []) else {
+      Log.error(message: "Could not make josn object")
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+    guard let jsonStr = String(data: jsonData, encoding: .utf8) else {
+      Log.error(message: "Could not make josn str")
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
+    response.setBody(string: jsonStr)
+    response.completed()
+  }
+
+
 
   static func getLast(request: HTTPRequest, response:HTTPResponse) {
     guard validateRequest(request: request) else {
@@ -143,11 +359,7 @@ class AppAPI {
     print("DeviceID is:'\(deviceID)' count is:\(count)")
 
     let query = DataBase.DBSchema.SensorDataSchema.selectLastNQuery(deviceID: deviceID, count: count)
-    performQuery(query: query, request: request, response: response)
-
-  }
-
-  static func getLastAverage(request: HTTPRequest, response:HTTPResponse) {
+    performQuery(query: query, request: request, response: response, jsonHandler: sensorDataJsonItemHandler, pbfHandler: sensorDataPBFItemHandler)
 
   }
 
@@ -187,8 +399,86 @@ class AppAPI {
     }
     print("DeviceID is:'\(deviceID)' start from:\(startDate) end to: \(endDate)")
     let query = DataBase.DBSchema.SensorDataSchema.selectRangeQuery(deviceID: deviceID, startDate: startDate, endDate: endDate)
-    performQuery(query: query, request: request, response: response)
+    performQuery(query: query, request: request, response: response, jsonHandler: sensorDataJsonItemHandler, pbfHandler: sensorDataPBFItemHandler)
 
+  }
+
+  static func getListAverage(request: HTTPRequest, response:HTTPResponse) {
+    guard validateRequest(request: request) else {
+      Log.error(message: "Invalid request!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+    let params = request.urlParams
+
+    guard let deviceID = params[AppRequestSchema.Last.Fields.deviceID] else {
+      Log.error(message: "Device ID not present!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+    guard let startDateStr = params[AppRequestSchema.List.Fields.startDate] else {
+      Log.error(message: "StartDate Not present!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+
+    }
+
+    guard let startDate = Double(startDateStr) else {
+      Log.error(message: "StartDate malformed!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+
+    var endDate: Double? = nil
+    if let endDateStr = params[AppRequestSchema.List.Fields.endDate] {
+      endDate = Double(endDateStr)
+    }
+    print("DeviceID is:'\(deviceID)' start from:\(startDate) end to: \(endDate)")
+    let query = DataBase.DBSchema.SensorDataSchema.selectAverageRangeQuery(deviceID: deviceID, startDate: startDate, endDate: endDate)
+    performQuery(query: query, request: request, response: response, jsonHandler: sensorDataJsonItemHandler, pbfHandler: sensorDataPBFItemHandler)
+
+  }
+
+  static func getHourlyAverage(request: HTTPRequest, response:HTTPResponse) {
+
+    guard validateRequest(request: request) else {
+      Log.error(message: "Invalid request!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+    let params = request.urlParams
+
+    guard let deviceID = params[AppRequestSchema.Last.Fields.deviceID] else {
+      Log.error(message: "Device ID not present!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+    guard let startDateStr = params[AppRequestSchema.List.Fields.startDate] else {
+      Log.error(message: "StartDate Not present!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+
+    }
+
+    guard let startDate = Double(startDateStr) else {
+      Log.error(message: "StartDate malformed!")
+      response.completed(status: HTTPResponseStatus.badRequest)
+      return
+    }
+
+
+    var endDate: Double? = nil
+    if let endDateStr = params[AppRequestSchema.List.Fields.endDate] {
+      endDate = Double(endDateStr)
+    }
+    print("DeviceID is:'\(deviceID)' start from:\(startDate) end to: \(endDate)")
+    let query = DataBase.DBSchema.SensorDataSchema.selectHourlyAverageQuery(deviceID: deviceID, startDate: startDate, endDate: endDate)
+    performQuery(query: query, request: request, response: response, jsonHandler: sensorDataHourlyAverageJsonHandler, pbfHandler: sensorDataHourlyAveragePbfHandler)
   }
 
   static func validateRequest(request: HTTPRequest) -> Bool {
@@ -202,73 +492,6 @@ class AppAPI {
 
 
 
-  static func parseRow(row: [String?]) -> SensorDataObject? {
-    guard
-      let devID = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.deviceID],
-      let tempStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.temperature],
-      let humStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.humidity],
-      let pressStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.pressure],
-      let uvStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.uv],
-      let dateStr = row[DataBase.DBSchema.SensorDataSchema.FieldsOrder.date] else {
-        Log.error(message: "Could not parse row data.")
-        return nil
-    }
-
-    guard let temp = Float(tempStr),
-      let hum = Float(humStr),
-      let press = Float(pressStr),
-      let uv = Float(uvStr),
-      let dateTicks = Double(dateStr) else {
-        Log.error(message: "Could not cast row data.")
-        return nil
-    }
-
-    return SensorDataObject(deviceID: devID, temperature: temp, humidity: hum, pressure: press, uv: uv, date: dateTicks)
-
-  }
-
-  static func parseRows(rows: [[String?]]) -> [SensorDataObject] {
-    var result: [SensorDataObject] = []
-    for row in rows {
-      guard let sensO = parseRow(row: row) else {
-        Log.warning(message: "Could not parse row: \(row)")
-        continue
-      }
-      result.append(sensO)
-    }
-    return result
-  }
-
-  static func jsonParseSensorDataRow(rows: [SensorDataObject]) -> JSONArray? {
-
-    var result: JSONArray = []
-    for row in rows {
-      var jsonRow: JSONDictionary = [:]
-      jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.deviceID] = row.deviceID
-      jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.temperature] = row.temperature
-      jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.humidity] = row.humidity
-      jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.pressure] = row.pressure
-      jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.uv] = row.uv
-      jsonRow[DataBase.DBSchema.SensorDataSchema.Fields.date] = row.date
-      result.append(jsonRow)
-
-    }
-    return result
-
-  }
-
-  static func pbfParseSensorData(rows: [SensorDataObject]) -> SensorDataResult? {
-    var res: [SensorDataModel] = []
-    for row in rows {
-
-      let mod = SensorDataModel(deviceId: row.deviceID, temperature: row.temperature, humidity: row.humidity, pressure: row.pressure, uv: row.uv, date: row.date)
-      res.append(mod)
-
-    }
-    
-    return SensorDataResult(data: res)
-
-  }
   
   
   

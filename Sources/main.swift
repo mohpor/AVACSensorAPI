@@ -41,6 +41,9 @@ routes.add(method: .post, uri: "/", handler: handler)
 routes.add(method: .post, uri: "/sensor", handler: SensorAPI.addSensorData)
 routes.add(method: .get, uri: "/app/last", handler: AppAPI.getLast)
 routes.add(method: .get, uri: "/app/list", handler: AppAPI.getList)
+routes.add(method: .get, uri: "/app/listAverage", handler: AppAPI.getListAverage)
+routes.add(method: .get, uri: "/app/hourlyAverage", handler: AppAPI.getHourlyAverage)
+
 
 server.addRoutes(routes)
 
