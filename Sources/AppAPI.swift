@@ -335,7 +335,7 @@ class AppAPI {
       response.setMimeTypeJson()
       response.completed()
     } catch {
-      Log.error(message: "Could not make josn object.\n\(jsonArray.debugDescription)")
+      Log.error(message: "Could not make josn object.\n\(jsonArray.debugDescription)\n\(error)")
       response.completed(status: HTTPResponseStatus.internalServerError)
       return
     }
