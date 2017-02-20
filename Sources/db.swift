@@ -16,7 +16,7 @@ struct DataBase {
 
   struct DBConnection {
     static let host = "127.0.0.1"
-    static let user = "root"
+    static let user = "mohpor"
     static let password = "Moh.6686"
   }
 
