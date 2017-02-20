@@ -324,6 +324,7 @@ class AppAPI {
       return
     }
 
+    /*
     do {
       let jsonData = try JSONSerialization.data(withJSONObject: jsonArray, options: [])
       guard let jsonStr = String(data: jsonData, encoding: .utf8) else {
@@ -339,8 +340,8 @@ class AppAPI {
       response.completed(status: HTTPResponseStatus.internalServerError)
       return
     }
+     */
 
-    /*
      guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonArray, options: []) else {
      Log.error(message: "Could not make josn object.\n\(jsonArray.debugDescription)")
      response.completed(status: HTTPResponseStatus.internalServerError)
@@ -354,7 +355,7 @@ class AppAPI {
      response.setBody(string: jsonStr)
      response.setMimeTypeJson()
      response.completed()
-     */
+
   }
 
 
