@@ -27,7 +27,7 @@ import Foundation
 
 func handler(request: HTTPRequest, response:HTTPResponse){
 		response.setHeader(.contentType, value: "text/html")
-		response.appendBody(string: "<html><title>Nada.</title><body>Nothing to see here.</body></html>")
+		response.appendBody(string: "<html><title>Nada.</title><body>Working!</body></html>")
 		response.completed()
 }
 
@@ -49,7 +49,7 @@ server.addRoutes(routes)
 
 server.serverPort = 8765
 server.documentRoot = "./webroot"
-
+server.serverAddress = "178.62.99.233"
 
 configureServer(server)
 
