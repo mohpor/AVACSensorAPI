@@ -23,7 +23,7 @@ struct DataBase {
   struct DBSchema {
     static let schemaName = "Sensor_Data"
     struct SensorDataSchema {
-      static let name  = "Sensor_Data"
+      static let name  = "sensor_data"
       struct Fields {
 
         static let deviceID = "deviceID"
