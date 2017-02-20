@@ -324,8 +324,11 @@ static func sensorDataHourlyAverageJsonHandler(response: HTTPResponse, resultArr
       return
     }
 
-  do {
-    let jsonData = try JSONSerialization.data(withJSONObject: jsonArray, options: [])
+    guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonArray, options: []) else {
+      Log.error(message: "Could not make josn object.\n\(jsonArray.debugDescription)")
+      response.completed(status: HTTPResponseStatus.internalServerError)
+      return
+    }
     guard let jsonStr = String(data: jsonData, encoding: .utf8) else {
       Log.error(message: "Could not make josn str")
       response.completed(status: HTTPResponseStatus.internalServerError)
@@ -334,13 +337,6 @@ static func sensorDataHourlyAverageJsonHandler(response: HTTPResponse, resultArr
     response.setBody(string: jsonStr)
     response.setMimeTypeJson()
     response.completed()
-  } catch {
-    Log.error(message: "Could not make josn object.\n\(jsonArray.debugDescription)\n\(error)")
-    response.completed(status: HTTPResponseStatus.internalServerError)
-    return
-  }
-
-
   }
 
 
