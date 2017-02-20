@@ -132,6 +132,7 @@ struct DataBase {
 extension MySQL {
 
   func performQuery(query: String) -> Bool {
+    Log.info(message: "Connecting to DB...")
     guard dataMysql.connect(host: DataBase.DBConnection.host, user: DataBase.DBConnection.user, password: DataBase.DBConnection.password ) else {
       Log.info(message: "Failure connecting to data server \(DataBase.DBConnection.host)")
       return false
