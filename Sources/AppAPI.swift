@@ -14,7 +14,6 @@ import MySQL
 
 typealias dataResponseHandler = ((HTTPResponse, [[String?]]) -> Void)
 
-
 struct AppRequestSchema {
 
   struct Headers {
@@ -274,6 +273,7 @@ class AppAPI {
       return
     }
     response.setBody(string: jsonStr)
+    response.setMimeTypeJson()
     response.completed()
   }
 
@@ -292,6 +292,7 @@ class AppAPI {
     }
 
     response.setBody(bytes: pbfData)
+    response.setMimeTypePbf()
     response.completed()
   }
 
@@ -311,6 +312,7 @@ class AppAPI {
     }
 
     response.setBody(bytes: pbfData)
+    response.setMimeTypePbf()
     response.completed()
   }
 
@@ -333,6 +335,7 @@ static func sensorDataHourlyAverageJsonHandler(response: HTTPResponse, resultArr
       return
     }
     response.setBody(string: jsonStr)
+    response.setMimeTypeJson()
     response.completed()
   }
 
@@ -490,10 +493,4 @@ static func sensorDataHourlyAverageJsonHandler(response: HTTPResponse, resultArr
     return true
   }
 
-
-
-  
-  
-  
-  
 }

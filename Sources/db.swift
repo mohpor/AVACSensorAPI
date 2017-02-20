@@ -15,7 +15,7 @@ let dataMysql = MySQL()
 struct DataBase {
 
   struct DBConnection {
-    static let host = "127.0.0.1"
+    static let host = "178.62.99.233"//"127.0.0.1"
     static let user = "root"
     static let password = "Moh.6686"
   }

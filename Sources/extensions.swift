@@ -37,3 +37,15 @@ extension HTTPRequest {
 
 }
 
+extension HTTPResponse {
+
+  func setMimeTypeJson() {
+    self.addHeader(HTTPResponseHeader.Name.contentType, value: "application/json")
+  }
+
+  func setMimeTypePbf() {
+    self.addHeader(HTTPResponseHeader.Name.contentType, value: "application/octet-stream")
+  }
+
+}
+
