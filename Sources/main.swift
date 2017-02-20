@@ -47,9 +47,9 @@ routes.add(method: .get, uri: "/app/hourlyAverage", handler: AppAPI.getHourlyAve
 
 server.addRoutes(routes)
 
-server.serverPort = 8765
+server.serverPort = 8080
 server.documentRoot = "./webroot"
-server.serverAddress = "178.62.99.233"
+//server.serverAddress = "178.62.99.233"
 
 configureServer(server)
 
