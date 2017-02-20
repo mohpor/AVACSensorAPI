@@ -263,7 +263,7 @@ class AppAPI {
     }
 
     guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonArray, options: []) else {
-      Log.error(message: "Could not make josn object")
+      Log.error(message: "Could not make josn object.\n\(jsonArray.debugDescription)")
       response.completed(status: HTTPResponseStatus.internalServerError)
       return
     }
@@ -325,7 +325,7 @@ static func sensorDataHourlyAverageJsonHandler(response: HTTPResponse, resultArr
     }
 
     guard let jsonData = try? JSONSerialization.data(withJSONObject: jsonArray, options: []) else {
-      Log.error(message: "Could not make josn object")
+      Log.error(message: "Could not make josn object.\n\(jsonArray.debugDescription)")
       response.completed(status: HTTPResponseStatus.internalServerError)
       return
     }
