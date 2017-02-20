@@ -79,10 +79,10 @@ class AppAPI {
           return nil
       }
       self.deviceID = devID
-      self.temperature = temp
-      self.humidity = hum
-      self.pressure = press
-      self.uv = uv
+      self.temperature = temp.roundTo(places: 2)
+      self.humidity = hum.roundTo(places: 2)
+      self.pressure = press.roundTo(places: 2)
+      self.uv = uv.roundTo(places: 2)
       self.date = dateTicks
     }
 
@@ -168,10 +168,10 @@ class AppAPI {
       }
 
       self.deviceID = devID
-      self.temperature = temp
-      self.humidity = hum
-      self.pressure = press
-      self.uv = uv
+      self.temperature = temp.roundTo(places: 2)
+      self.humidity = hum.roundTo(places: 2)
+      self.pressure = press.roundTo(places: 2)
+      self.uv = uv.roundTo(places: 2)
       self.date = dateStr
       self.hour = hour
 
