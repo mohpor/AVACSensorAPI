@@ -27,7 +27,7 @@ import Foundation
 
 func handler(request: HTTPRequest, response:HTTPResponse){
 		response.setHeader(.contentType, value: "text/html")
-		response.appendBody(string: "<html><title>Nada.</title><body>Working!</body></html>")
+		response.appendBody(string: "<html><title>Nada.</title><body>Sensor API is Working!</body></html>")
 		response.completed()
 }
 
@@ -39,10 +39,6 @@ var routes = Routes()
 routes.add(method: .get, uri: "/", handler: handler)
 routes.add(method: .post, uri: "/", handler: handler)
 routes.add(method: .post, uri: "/sensor", handler: SensorAPI.addSensorData)
-routes.add(method: .get, uri: "/app/last", handler: AppAPI.getLast)
-routes.add(method: .get, uri: "/app/list", handler: AppAPI.getList)
-routes.add(method: .get, uri: "/app/listAverage", handler: AppAPI.getListAverage)
-routes.add(method: .get, uri: "/app/hourlyAverage", handler: AppAPI.getHourlyAverage)
 
 
 server.addRoutes(routes)

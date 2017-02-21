@@ -4,31 +4,24 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "43BF8F9148B1F39FBDE34E7D1E69C54C78D21FCC" : 9223372036854775807,
+    "C4127C9B9C8FDF608B532AD72407863CE2797629" : 9223372036854775807,
     "0B9B07A57A7603A158703662ACDD6F3ABAA339F4" : 9223372036854775807,
-    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : 9223372036854775807,
-    "C4127C9B9C8FDF608B532AD72407863CE2797629" : 9223372036854775807
+    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : 9223372036854775807
   },
-  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "107C851C-39C7-41B5-B526-3026A1FC58B8",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "EED228E5-E1FC-4157-9187-CCF5EA1D6049",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "43BF8F9148B1F39FBDE34E7D1E69C54C78D21FCC" : "AVACServer\/Packages\/SwiftProtobuf-0.9.24\/",
-    "0B9B07A57A7603A158703662ACDD6F3ABAA339F4" : "AVACServer\/",
-    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : "AVACServer\/Packages\/PerfectHTTP-2.1.6\/",
-    "C4127C9B9C8FDF608B532AD72407863CE2797629" : "AVACServer\/Packages\/PerfectHTTPServer-2.1.14\/"
+    "C4127C9B9C8FDF608B532AD72407863CE2797629" : "AVACSensorAPI\/Packages\/PerfectHTTPServer-2.1.14\/",
+    "0B9B07A57A7603A158703662ACDD6F3ABAA339F4" : "AVACSensorAPI\/",
+    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : "AVACSensorAPI\/Packages\/PerfectHTTP-2.1.6\/"
   },
-  "DVTSourceControlWorkspaceBlueprintNameKey" : "AVACServer",
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "AVACSensorAPI",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
-  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AVACServer.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AVACSensorAPI.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mohpor\/AVACServer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mohpor\/AVACSensorAPI.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0B9B07A57A7603A158703662ACDD6F3ABAA339F4"
-    },
-    {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/apple\/swift-protobuf.git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "43BF8F9148B1F39FBDE34E7D1E69C54C78D21FCC"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/PerfectlySoft\/Perfect-HTTP.git",
