@@ -4,15 +4,21 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "C4127C9B9C8FDF608B532AD72407863CE2797629" : 9223372036854775807,
+    "65880DAFEE5F57D1D1C181560E763EECFD96B06D" : 9223372036854775807,
+    "8FE2B4BB55A3C9D7B3B78FD1E2302636E924BDDC" : 9223372036854775807,
+    "6D09577DC770D433CEBE622BD4B45C8CF6CB8CCC" : 9223372036854775807,
     "0B9B07A57A7603A158703662ACDD6F3ABAA339F4" : 9223372036854775807,
-    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : 9223372036854775807
+    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : 9223372036854775807,
+    "C4127C9B9C8FDF608B532AD72407863CE2797629" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "EED228E5-E1FC-4157-9187-CCF5EA1D6049",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "C4127C9B9C8FDF608B532AD72407863CE2797629" : "AVACSensorAPI\/Packages\/PerfectHTTPServer-2.1.14\/",
+    "65880DAFEE5F57D1D1C181560E763EECFD96B06D" : "AVACSensorAPI\/Packages\/Fluent-1.4.1\/",
+    "8FE2B4BB55A3C9D7B3B78FD1E2302636E924BDDC" : "AVACSensorAPI\/Packages\/Jay-1.0.1\/",
+    "6D09577DC770D433CEBE622BD4B45C8CF6CB8CCC" : "AVACSensorAPI\/Packages\/Polymorphic-1.0.1\/",
     "0B9B07A57A7603A158703662ACDD6F3ABAA339F4" : "AVACSensorAPI\/",
-    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : "AVACSensorAPI\/Packages\/PerfectHTTP-2.1.6\/"
+    "9197B75B1BC29921D6E3B1CCDC2B258350009F3A" : "AVACSensorAPI\/Packages\/PerfectHTTP-2.1.6\/",
+    "C4127C9B9C8FDF608B532AD72407863CE2797629" : "AVACSensorAPI\/Packages\/PerfectHTTPServer-2.1.14\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "AVACSensorAPI",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -22,6 +28,21 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mohpor\/AVACSensorAPI.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0B9B07A57A7603A158703662ACDD6F3ABAA339F4"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/vapor\/fluent.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "65880DAFEE5F57D1D1C181560E763EECFD96B06D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/vapor\/polymorphic.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6D09577DC770D433CEBE622BD4B45C8CF6CB8CCC"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DanToml\/Jay.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8FE2B4BB55A3C9D7B3B78FD1E2302636E924BDDC"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/PerfectlySoft\/Perfect-HTTP.git",

@@ -60,10 +60,7 @@ class SensorAPI {
 
     print("db got called (\(request.path))")
     let query = DataBase.DBSchema.SensorDataSchema.insertQuery(sensorData: sensorData)
-    defer {
-      dataMysql.close()
-    }
-    guard dataMysql.performQuery(query: query) else {
+    guard let _ = DataBase.performQuery(query: query) else {
       response.completed(status: HTTPResponseStatus.internalServerError)
       return
     }

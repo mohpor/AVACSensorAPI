@@ -10,7 +10,7 @@ import Foundation
 import MySQL
 import PerfectLib
 
-let dataMysql = MySQL()
+//let dataMysql = MySQL()
 
 struct DataBase {
 
@@ -66,25 +66,23 @@ struct DataBase {
       
     }
   }
-  
-}
+  static func performQuery(query: String) -> JSONArray? {
 
-extension MySQL {
+    do {
 
-  func performQuery(query: String) -> Bool {    
-    guard dataMysql.connect(host: DataBase.DBConnection.host, user: DataBase.DBConnection.user, password: DataBase.DBConnection.password ) else {
-      Log.info(message: "Failure connecting to data server(\(DataBase.DBConnection.host)):\n \(dataMysql.errorCode()) \(dataMysql.errorMessage())")
-      //Log.info(message: "Failure connecting to data server \(DataBase.DBConnection.host)")
-      return false
+      let dataMysql = try MySQL.Database(
+        host: DataBase.DBConnection.host,
+        user: DataBase.DBConnection.user,
+        password: DataBase.DBConnection.password,
+        database: DataBase.DBSchema.schemaName)
+
+      let result = try dataMysql.execute(query)
+      return result
+
+    } catch {
+      print("Error Perfoming query")
+      return nil
     }
-    
-    guard dataMysql.selectDatabase(named: DataBase.DBSchema.schemaName) && dataMysql.query(statement: query) else {
-      Log.info(message: "Failure: \(dataMysql.errorCode()) \(dataMysql.errorMessage())")
-      return false
-    }
-
-    return true
-    
   }
   
 }
