@@ -24,6 +24,7 @@ struct SensorRequestSchema {
     static let humidity = "h"
     static let pressure = "p"
     static let uv = "u"
+    static let airQ = "a"
   }
 
 
@@ -36,6 +37,7 @@ struct SensorData {
   let humidity: Float
   let pressure: Float
   let uv: Float
+  let airQ: Int
 
 }
 
@@ -118,9 +120,19 @@ class SensorAPI {
       Log.error(message: "UV is invalid")
       return nil
     }
+
+    guard let airQStr = params[SensorRequestSchema.Fields.airQ] else {
+      Log.error(message: "AirQ param is missing")
+      return nil
+    }
+
+    guard let airQ = Int(airQStr) else {
+      Log.error(message: "Could not parse AirQ value")
+      return nil
+    }
     
-    return SensorData(deviceID: devID, temperature: temp, humidity: hum, pressure: press, uv: uv)
-    
+    return SensorData(deviceID: devID, temperature: temp, humidity: hum, pressure: press, uv: uv, airQ: airQ)
+
     
   }
 

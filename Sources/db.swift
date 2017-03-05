@@ -34,17 +34,7 @@ struct DataBase {
         static let date_part = "_date"
         static let date_hour = "hour"
         static let uv = "uv"
-
-      }
-
-      struct FieldsOrder {
-        static let deviceID = 0
-        static let temperature = 1
-        static let humidity = 2
-        static let pressure = 3
-        static let uv = 4
-        static let date = 5
-        static let hour = 6
+        static let airQ = "airQ"
 
       }
 
@@ -52,13 +42,14 @@ struct DataBase {
 
         var q = ""
         q += "INSERT INTO \(DBSchema.SensorDataSchema.name) "
-        q += "(\(DBSchema.SensorDataSchema.Fields.deviceID), \(DBSchema.SensorDataSchema.Fields.temperature), \(DBSchema.SensorDataSchema.Fields.humidity), \(DBSchema.SensorDataSchema.Fields.pressure), \(DBSchema.SensorDataSchema.Fields.uv))"
+        q += "(\(DBSchema.SensorDataSchema.Fields.deviceID), \(DBSchema.SensorDataSchema.Fields.temperature), \(DBSchema.SensorDataSchema.Fields.humidity), \(DBSchema.SensorDataSchema.Fields.pressure), \(DBSchema.SensorDataSchema.Fields.uv), \(DBSchema.SensorDataSchema.Fields.airQ))"
         q += " VALUES ("
         q += "'\(sensorData.deviceID)', "
         q += "'\(sensorData.temperature)', "
         q += "'\(sensorData.humidity)', "
         q += "'\(sensorData.pressure)', "
-        q += "'\(sensorData.uv)'"
+        q += "'\(sensorData.uv)',"
+        q += "'\(sensorData.airQ)'"
         q += ")"
         return q
 
